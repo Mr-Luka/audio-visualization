@@ -139,7 +139,7 @@ function getAudio() {
 }
 function _getAudio() {
   _getAudio = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var stream, audioCtx, source, timeData;
+    var stream, audioCtx, source, timeData, frequencyData;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -157,14 +157,30 @@ function _getAudio() {
           analyzer.fftSize = Math.pow(2, 10);
           // Pull the data off the audio
           timeData = new Uint8Array(analyzer.frequencyBinCount);
-          console.log(timeData);
-        case 10:
+          frequencyData = new Uint8Array(analyzer.frequencyBinCount);
+          drawTimeData(timeData);
+        case 11:
         case "end":
           return _context.stop();
       }
     }, _callee);
   }));
   return _getAudio.apply(this, arguments);
+}
+function drawTimeData(timeData) {
+  // Inject the time data into our timeData array
+  analyzer.getByteTimeDomainData(timeData);
+  // Now that we have the data , lets turn it into something visual
+  // 1) Clear the canvas
+  // 2) Setup some canvas drawing
+  ctx.lineWidth = 10;
+  ctx.strokeStyle = "#ffc600";
+  ctx.beginPath();
+  console.log(timeData);
+  // Call itself as soon as possible
+  requestAnimationFrame(function () {
+    return drawTimeData(timeData);
+  });
 }
 getAudio();
 },{}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
