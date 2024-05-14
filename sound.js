@@ -6,6 +6,7 @@ const ctx = canvas.getContext("2d");
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 let analyzer;
+let bufferLength;
 
 function handleError(err) {
     console.log("You must give access to your mic in order to proceed;")
@@ -22,9 +23,11 @@ async function getAudio() {
     // how much data I want to collect
     analyzer.fftSize = 2 ** 10;
     // Pull the data off the audio
-    const timeData = new Uint8Array(analyzer.frequencyBinCount);
+    //how many pieces of data are there?
+    bufferLength = analyzer.frequencyBinCount;
+    const timeData = new Uint8Array(bufferLength);
     const frequencyData = new Uint8Array
-    (analyzer.frequencyBinCount);
+    (bufferLength);
     drawTimeData(timeData);
 }
 
@@ -33,10 +36,28 @@ function drawTimeData(timeData) {
     analyzer.getByteTimeDomainData(timeData)
     // Now that we have the data , lets turn it into something visual
     // 1) Clear the canvas
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
     // 2) Setup some canvas drawing
     ctx.lineWidth = 10;
     ctx.strokeStyle = "#ffc600";
     ctx.beginPath();
+    // This will give us how big each slice will be
+    const sliceWidth = WIDTH / bufferLength;
+    let x = 0;
+    timeData.forEach((data, i)=>{
+        const v = data / 128;
+        const y = (v * HEIGHT) / 2;
+        // draw our lines
+        if( i === 0) {
+            ctx.moveTo(x, y)
+        } else {
+            ctx.lineTo(x, y);
+        }
+        x += sliceWidth;
+    });
+    
+    ctx.stroke()
+
     console.log(timeData);
     // Call itself as soon as possible
     requestAnimationFrame(()=> drawTimeData(timeData));
