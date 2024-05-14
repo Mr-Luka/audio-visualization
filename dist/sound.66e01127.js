@@ -162,7 +162,8 @@ function _getAudio() {
           timeData = new Uint8Array(bufferLength);
           frequencyData = new Uint8Array(bufferLength);
           drawTimeData(timeData);
-        case 12:
+          drawFrequency(frequencyData);
+        case 13:
         case "end":
           return _context.stop();
       }
@@ -200,6 +201,11 @@ function drawTimeData(timeData) {
   requestAnimationFrame(function () {
     return drawTimeData(timeData);
   });
+}
+function drawFrequency(frequencyData) {
+  // Get the frequency data into our frequencyData array
+  analyzer.getByteTimeDomainData(frequencyData);
+  console.log(frequencyData);
 }
 getAudio();
 },{}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {

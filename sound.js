@@ -29,6 +29,7 @@ async function getAudio() {
     const frequencyData = new Uint8Array
     (bufferLength);
     drawTimeData(timeData);
+    drawFrequency(frequencyData);
 }
 
 function drawTimeData(timeData) {
@@ -61,6 +62,12 @@ function drawTimeData(timeData) {
     console.log(timeData);
     // Call itself as soon as possible
     requestAnimationFrame(()=> drawTimeData(timeData));
+}
+
+function drawFrequency(frequencyData) {
+    // Get the frequency data into our frequencyData array
+    analyzer.getByteTimeDomainData(frequencyData);
+    console.log(frequencyData)
 }
 
 getAudio();
