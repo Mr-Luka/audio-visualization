@@ -67,7 +67,22 @@ function drawTimeData(timeData) {
 function drawFrequency(frequencyData) {
     // Get the frequency data into our frequencyData array
     analyzer.getByteTimeDomainData(frequencyData);
-    console.log(frequencyData)
+    // figure out the bar width
+    const barWidth = (WIDTH / bufferLength) * 2.5;
+    let x = 0;
+    frequencyData.forEach(amount => {
+        // 0 to 255
+        const percent = amount / 255;
+        const barHeight = (HEIGHT * percent) / 2;
+        // Convert the color to HSL 
+        ctx.fillStyle = "green";
+        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
+        x += barWidth + 2;
+    });
+
+
+    requestAnimationFrame(()=> drawFrequency(frequencyData));
+
 }
 
 getAudio();

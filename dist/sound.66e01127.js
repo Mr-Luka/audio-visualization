@@ -205,7 +205,21 @@ function drawTimeData(timeData) {
 function drawFrequency(frequencyData) {
   // Get the frequency data into our frequencyData array
   analyzer.getByteTimeDomainData(frequencyData);
-  console.log(frequencyData);
+  // figure out the bar width
+  var barWidth = WIDTH / bufferLength * 2.5;
+  var x = 0;
+  frequencyData.forEach(function (amount) {
+    // 0 to 255
+    var percent = amount / 255;
+    var barHeight = HEIGHT * percent / 2;
+    // Convert the color to HSL 
+    ctx.fillStyle = "green";
+    ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+    x += barWidth + 2;
+  });
+  requestAnimationFrame(function () {
+    return drawFrequency(frequencyData);
+  });
 }
 getAudio();
 },{}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
