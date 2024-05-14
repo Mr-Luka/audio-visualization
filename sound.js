@@ -1,3 +1,4 @@
+import { hslToRgb } from "./utils.js";
 
 const WIDTH = 1500;
 const HEIGHT = 1500;
@@ -59,7 +60,7 @@ function drawTimeData(timeData) {
     
     ctx.stroke()
 
-    console.log(timeData);
+
     // Call itself as soon as possible
     requestAnimationFrame(()=> drawTimeData(timeData));
 }
@@ -73,9 +74,11 @@ function drawFrequency(frequencyData) {
     frequencyData.forEach(amount => {
         // 0 to 255
         const percent = amount / 255;
+        const [h, s, l] = [360 / (percent * 360), 0.5, 0.75];
         const barHeight = (HEIGHT * percent) / 2;
         // Convert the color to HSL 
-        ctx.fillStyle = "green";
+        const [r, g, b] = hslToRgb(h, s, l);
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
         ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
         x += barWidth + 2;
     });
