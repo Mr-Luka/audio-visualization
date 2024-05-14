@@ -211,16 +211,15 @@ function _getAudio() {
   return _getAudio.apply(this, arguments);
 }
 function drawTimeData(timeData) {
-  // Inject the time data into our timeData array
+  // inject the time data into our timeData array
   analyzer.getByteTimeDomainData(timeData);
-  // Now that we have the data , lets turn it into something visual
-  // 1) Clear the canvas
+  // now that we have the data, lets turn it into something visual
+  // 1. Clear the canvas TODO
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
-  // 2) Setup some canvas drawing
+  // 2. setup some canvas drawing
   ctx.lineWidth = 10;
   ctx.strokeStyle = "#ffc600";
   ctx.beginPath();
-  // This will give us how big each slice will be
   var sliceWidth = WIDTH / bufferLength;
   var x = 0;
   timeData.forEach(function (data, i) {
@@ -236,24 +235,24 @@ function drawTimeData(timeData) {
   });
   ctx.stroke();
 
-  // Call itself as soon as possible
+  // call itself as soon as possible
   requestAnimationFrame(function () {
     return drawTimeData(timeData);
   });
 }
 function drawFrequency(frequencyData) {
   // Get the frequency data into our frequencyData array
-  analyzer.getByteTimeDomainData(frequencyData);
+  analyzer.getByteFrequencyData(frequencyData);
   // figure out the bar width
   var barWidth = WIDTH / bufferLength * 2.5;
   var x = 0;
   frequencyData.forEach(function (amount) {
     // 0 to 255
     var percent = amount / 255;
-    var h = 360 / (percent * 360),
-      s = 0.5,
-      l = 0.75;
-    var barHeight = HEIGHT * percent / 2;
+    var h = 360 / (percent * 360) - 0.5,
+      s = 0.8,
+      l = 0.5;
+    var barHeight = HEIGHT * percent * 0.5;
     // Convert the color to HSL 
     var _hslToRgb = (0, _utils.hslToRgb)(h, s, l),
       _hslToRgb2 = _slicedToArray(_hslToRgb, 3),
